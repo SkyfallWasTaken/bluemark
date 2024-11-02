@@ -1,8 +1,9 @@
 import "dotenv/config";
-import { AtpAgent } from "@atproto/api";
+import { AtpAgent, RichText } from "@atproto/api";
 import { z } from "zod";
 import winston from "winston";
 import { consoleFormat } from "winston-console-format";
+import { db, savedPosts } from "./db";
 
 const Env = z.object({
   ATPROTO_SERVICE: z.string().url(),
@@ -11,8 +12,6 @@ const Env = z.object({
   DATABASE_URL: z.string(),
 });
 export const env = Env.parse(process.env);
-
-import { db, savedPosts, SavedPost } from "./db";
 
 const logger = winston.createLogger({
   level: "info",
@@ -78,8 +77,13 @@ setInterval(async () => {
         seenAt: time,
       });
 
-      await agent.post({
+      const rt = new RichText({
         text: `👋 Hey @${notif.author.handle}, just saved that for you!`,
+      });
+      await rt.detectFacets(agent);
+      await agent.post({
+        text: rt.text,
+        facets: rt.facets,
         reply: {
           root: {
             uri: reply?.root.uri || post.uri,
@@ -91,6 +95,12 @@ setInterval(async () => {
           },
         },
         createdAt: time,
+      });
+
+      await db.insert(savedPosts).values({
+        uri: post.uri,
+        cid: post.cid,
+        savedByDid: notif.author.did,
       });
     }
   }

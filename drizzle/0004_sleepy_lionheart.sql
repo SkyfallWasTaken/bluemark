@@ -1,0 +1,1 @@
+ALTER TABLE `saved_posts` DROP COLUMN `postAuthorDid`;

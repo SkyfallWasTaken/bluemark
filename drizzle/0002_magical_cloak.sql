@@ -1,0 +1,1 @@
+ALTER TABLE `saved_posts` RENAME COLUMN "url" TO "uri";
