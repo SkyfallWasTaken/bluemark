@@ -4,6 +4,16 @@ import { z } from "zod";
 import winston from "winston";
 import { consoleFormat } from "winston-console-format";
 
+const Env = z.object({
+  ATPROTO_SERVICE: z.string().url(),
+  ATPROTO_IDENTIFIER: z.string(),
+  ATPROTO_PASSWORD: z.string(),
+  DATABASE_URL: z.string(),
+});
+export const env = Env.parse(process.env);
+
+import { db, savedPosts, SavedPost } from "./db";
+
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
@@ -28,13 +38,6 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
-
-const Env = z.object({
-  ATPROTO_SERVICE: z.string().url(),
-  ATPROTO_IDENTIFIER: z.string(),
-  ATPROTO_PASSWORD: z.string(),
-});
-const env = Env.parse(process.env);
 
 const agent = new AtpAgent({
   service: env.ATPROTO_SERVICE,

@@ -3,10 +3,12 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=development bun ."
+    "start": "NODE_ENV=development bun .",
+    "drizzle-kit": "drizzle-kit"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "drizzle-kit": "^0.27.1",
     "winston-console-format": "^1.0.8"
   },
   "peerDependencies": {
@@ -14,7 +16,9 @@
   },
   "dependencies": {
     "@atproto/api": "^0.13.14",
+    "@libsql/client": "^0.14.0",
     "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.36.0",
     "winston": "^3.15.0",
     "zod": "^3.23.8"
   }
