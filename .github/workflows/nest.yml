@@ -18,4 +18,5 @@ jobs:
             export PATH=/nix/skyfall/nix/profiles/default/bin:$PATH
             cd /home/skyfall/bluemark
             git pull
+            bun install
             systemctl --user restart bluemark.service
