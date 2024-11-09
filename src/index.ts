@@ -11,6 +11,7 @@ const Env = z.object({
   ATPROTO_IDENTIFIER: z.string(),
   ATPROTO_PASSWORD: z.string(),
   DATABASE_URL: z.string(),
+  DOMAIN: z.string(),
   PORT: z
     .string()
     .default("5173")
@@ -83,7 +84,7 @@ setInterval(async () => {
       });
 
       const rt = new RichText({
-        text: `👋 Hey @${notif.author.handle}, just saved that for you!`,
+        text: `👋 Hey @${notif.author.handle}, just saved that for you!\n\nView your bookmarks here: https://${env.DOMAIN}/view/${notif.author.handle}`,
       });
       await rt.detectFacets(agent);
       await agent.post({
