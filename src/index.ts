@@ -104,8 +104,8 @@ setInterval(async () => {
       });
 
       await db.insert(savedPosts).values({
-        uri: post.uri,
-        cid: post.cid,
+        uri: reply?.parent.uri || post.uri,
+        cid: reply?.parent.cid || post.cid,
         savedByDid: notif.author.did,
       });
     }
