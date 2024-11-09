@@ -1,8 +1,9 @@
 import "dotenv/config";
-import { AtpAgent, RichText } from "@atproto/api";
-import { z } from "zod";
 import winston from "winston";
 import { consoleFormat } from "winston-console-format";
+import { z } from "zod";
+
+import { AtpAgent, RichText } from "@atproto/api";
 import { db, savedPosts } from "./db";
 
 const Env = z.object({
@@ -10,10 +11,11 @@ const Env = z.object({
   ATPROTO_IDENTIFIER: z.string(),
   ATPROTO_PASSWORD: z.string(),
   DATABASE_URL: z.string(),
+  PORT: z.number().default(5173),
 });
 export const env = Env.parse(process.env);
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
   defaultMeta: { service: "user-service" },
@@ -38,7 +40,7 @@ if (process.env.NODE_ENV !== "production") {
   );
 }
 
-const agent = new AtpAgent({
+export const agent = new AtpAgent({
   service: env.ATPROTO_SERVICE,
 });
 await agent.login({
@@ -105,3 +107,5 @@ setInterval(async () => {
     }
   }
 }, 5_000);
+
+await import("./viewer");
