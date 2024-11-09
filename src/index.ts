@@ -11,7 +11,10 @@ const Env = z.object({
   ATPROTO_IDENTIFIER: z.string(),
   ATPROTO_PASSWORD: z.string(),
   DATABASE_URL: z.string(),
-  PORT: z.number().default(5173),
+  PORT: z
+    .string()
+    .default("5173")
+    .transform((val) => parseInt(val, 10)),
 });
 export const env = Env.parse(process.env);
 
